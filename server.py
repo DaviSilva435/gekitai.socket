@@ -14,10 +14,7 @@ import os
 
 # kill -9 $(lsof -t -i:210)
 
-HOST = '127.0.0.1'
-PORT = 210
-
-
+print("Vai rodar de novo")
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((HOST,PORT))
 server.listen()
@@ -25,6 +22,9 @@ print(f'O servidor está ativo no endereço {HOST}:{PORT}')
 
 root = tk.Tk()
 root.withdraw()
+
+def get_usernames(jogador_logado_socket):
+    return usernames[clients.index(jogador_logado_socket)]
 
 def globalMessage(message):
     print('Mensagem recebida no global')

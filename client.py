@@ -6,17 +6,16 @@ from tkinter.scrolledtext import ScrolledText
 import tkinter.font as font
 import tkinter as tk
 
+#from const import *
+
 """
 Cria objeto "Tkinter"/"Tk"
 """
 root = tk.Tk()
 root.withdraw()
 
-#ServerIP = input("Server IP: ")
+#HOST = input("Server IP: ")
 #PORT = int(input("Port: "))
-
-ServerIP = '127.0.0.1'
-PORT = 210
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 text_area_chat = ScrolledText()
@@ -55,45 +54,125 @@ def conectar_jogador(jogador_name_input, toplevel):
     try:
         global username
         username = jogador_name_input
-        client.connect((ServerIP,PORT))
+        client.connect((HOST,PORT))
         threading.Thread(target=receiveMessage, args=()).start()
         threading.Thread(target=sendMessage, args=()).start()
-        print(f'Conexao bem sucedido no endereco {ServerIP}:{PORT}')
+        print(f'Conexao bem sucedido no endereco {HOST}:{PORT}')
         fecha_tela(toplevel)
         janela_chat()
     except:
-        print(f'ERROR: Por favor revise seu endereco: {ServerIP}:{PORT}')
+        print(f'ERROR: Por favor revise seu endereco: {HOST}:{PORT}')
 
 
 def janela_chat():
     global text_area_chat
     newWindow = Toplevel(root)
     newWindow.title("BEM VINDO!")
-    newWindow.geometry("310x390")
+    newWindow.geometry("660x390")
+#    newWindow.configure(bg="#3b3b3b")
 
-#    bg_label = Label(newWindow, image=JANELA_PRINCIPAL_asset)
-#    bg_label.place(x=0, y=0)
+    frame_chat = Frame(newWindow, width=310, height=390, bg="#808080", pady=0, padx=0 )
+    frame_chat.grid(row=1, column=0)
 
 #    newWindow.protocol("WM_DELETE_WINDOW", mostra_janela_SAIR_PARTIDA)
 
-    # Abaixo instanciamos o widget aonde as mensagens são mostradas no chat.
-    text_area_chat = ScrolledText(newWindow, wrap=WORD, width=38, height=12, font=("Callibri", 8))
+    #CHAT
+    # Abaixo instanciamos o campo de texto aonde as mensagens são mostradas no chat.
+    text_area_chat = ScrolledText(frame_chat, wrap=WORD, width=38, height=12, font=("Callibri", 8))
     text_area_chat.place(x=20, y=150)
     text_area_chat.focus()
 
-    faz_jogada_button = Button(newWindow)
-    faz_jogada_button.place(x=150, y=13)
-    faz_jogada_button.bind("<Enter>")
-
-    label_mensagem = Entry(newWindow, width=30)
+    label_mensagem = Entry(frame_chat, width=30)
     label_mensagem.pack(padx=10, pady=10)
     label_mensagem.place(x=20, y=300)
 
-    button_envia_mensagem = Button(newWindow, text='ENVIAR', command=lambda:sendMessage(str(label_mensagem.get())))
+    button_envia_mensagem = Button(frame_chat, text='ENVIAR', command=lambda:sendMessage(str(label_mensagem.get())))
     button_envia_mensagem.place(x=200, y=350)
 
     text_area_chat.insert(tk.INSERT, f'Bem vindo ao chat {username}!\n', 'msg')
     text_area_chat.tag_config('msg', foreground='blue')
+
+
+    # TABULEIRO
+    frame_tabuleiro = Frame(newWindow, width=350, height=390, bg="#3b3b3b", pady=0, padx=10 )
+    frame_tabuleiro.grid(row=1, column=1)
+
+    # Configurando as linhas do tabuleiro -----------------
+
+    #### Vertical lines
+    #### height tamanho x esquerda y topo
+    app_b = Label(frame_tabuleiro, text="   ", height=78, padx=0,pady=5, relief="flat", anchor="center",
+                   font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=90)
+    app_b = Label(frame_tabuleiro, text="   ", height=78, padx=0,pady=5, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=90, y=90)
+    app_b = Label(frame_tabuleiro, text="   ", height=78, padx=0,pady=5, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=130, y=90)
+    app_b = Label(frame_tabuleiro, text="   ", height=78, padx=0,pady=5, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=170, y=90)
+    app_b = Label(frame_tabuleiro, text="   ", height=78, padx=0, pady=5, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=210, y=90)
+    app_b = Label(frame_tabuleiro, text="   ", height=78, padx=0, pady=5, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=250, y=90)
+    app_b = Label(frame_tabuleiro, text="   ", height=78, padx=0, pady=5, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=290, y=90)
+
+    ### Horizontal lines
+    ### width lateral x esquerda y top
+    app_b = Label(frame_tabuleiro, text="  ", width=240, padx=0, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=90)
+    app_b = Label(frame_tabuleiro, text="  ", width=240, padx=0, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=130)
+    app_b = Label(frame_tabuleiro, text="  ", width=240, padx=0, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=170)
+    app_b = Label(frame_tabuleiro, text="  ", width=240, padx=0, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=210)
+    app_b = Label(frame_tabuleiro, text="  ", width=240, padx=0, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=250)
+    app_b = Label(frame_tabuleiro, text="  ", width=240, padx=0, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=290)
+    app_b = Label(frame_tabuleiro, text="  ", width=240, padx=0, relief="flat", anchor="center",
+                  font=('Ivy 1 bold'), bg="#FFFFFF", fg="#FFFFFF")
+    app_b.place(x=50, y=330)
+
+    ### Botões do tabuleiro
+    b_1 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT,overrelief=RIDGE, command=lambda:efetuar_jogada())
+    b_1.place(x=50, y=93)
+    b_2 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT,overrelief=RIDGE)
+    b_2.place(x=90, y=93)
+    b_3 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
+    b_3.place(x=130, y=93)
+    b_4 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
+    b_4.place(x=170, y=93)
+    b_5 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
+    b_5.place(x=210, y=93)
+    b_6 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
+    b_6.place(x=250, y=93)
+
+
+
+def efetuar_jogada():
+    print("Chamou")
+    print(get_usernames(client))
+
 
 def receiveMessage():
     global text_area_chat
