@@ -1,3 +1,4 @@
+import json
 import socket
 import threading
 from const import *
@@ -35,15 +36,20 @@ def handleMessages(client):
     while True:
         try:
             print('Mensagem recebida no handle Mensage')
-            receiveMessageFromClient = client.recv(2048).decode('ascii')
-            globalMessage(f'{usernames[clients.index(client)]} :{receiveMessageFromClient}'.encode('ascii'))
+            mensagemRecebida = client.recv(2048).decode('ascii')
+            jsonData = json.loads(mensagemRecebida)
+            jsonData['name'] = usernames[clients.index(client)]
+            jsonData['index'] = clients.index(client)
+            mensagemRecebida = json.dumps(jsonData)
+            globalMessage(f'{mensagemRecebida}'.encode('ascii'))
+            #globalMessage(f'{usernames[clients.index(client)]} :{mensagemRecebida}'.encode('ascii'))
         except:
             clientLeaved = clients.index(client)
             client.close()
             clients.remove(clients[clientLeaved])
             clientLeavedUsername = usernames[clientLeaved]
             print(f'{clientLeavedUsername} saiu do chat...')
-            globalMessage(f'{clientLeavedUsername} nos deixou...'.encode('ascii'))
+            #globalMessage(f'{clientLeavedUsername} nos deixou...'.encode('ascii'))
             usernames.remove(clientLeavedUsername)
 
 
@@ -57,13 +63,13 @@ def conexao(text_area):
             # Adicionando a conexao a uma lista
             print(f"Nova conexao no endereco: {str(address)}")
             clients.append(client)
-            client.send('getUser'.encode('ascii'))
+            client.send('{"event":"getUser"}'.encode('ascii'))
             username = client.recv(2048).decode('ascii')
             usernames.append(username)
 
             # Printa no terminal e no servidor
             text_area.insert(tk.INSERT, f'{username} acaba de entrar no chat!\n'.encode('ascii'))
-            globalMessage(f'{username} acaba de entrar no chat!\n'.encode('ascii'))
+            #globalMessage(f'{"event":"CHAT, "message": {username} acaba de entrar no chat!}\n'.encode('ascii'))
 
             user_thread = threading.Thread(target=handleMessages,args=(client,))
             user_thread.start()
