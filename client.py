@@ -6,7 +6,7 @@ from tkinter.scrolledtext import ScrolledText
 import tkinter.font as font
 import tkinter as tk
 
-#from const import *
+from const import *
 
 """
 Cria objeto "Tkinter"/"Tk"
@@ -166,12 +166,6 @@ def janela_chat():
     b_6 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
                  font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
     b_6.place(x=250, y=93)
-
-
-
-def efetuar_jogada():
-    print("Chamou")
-    print(get_usernames(client))
 
 
 def receiveMessage():
