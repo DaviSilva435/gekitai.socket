@@ -20,6 +20,7 @@ root.withdraw()
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 text_area_chat = ScrolledText()
+b1 = b2 = b3 = b4 = b5 = b6 = Button()
 username = ''
 
 
@@ -70,6 +71,8 @@ def conectar_jogador(jogador_name_input, toplevel):
 
 def janela_chat():
     global text_area_chat
+    global b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,b16,b17,b18,b19,b20,b21,b22,b23,b24,\
+        b25,b26,b27,b28,b29,b30,b31,b32,b33,b34,b35,b36
     newWindow = Toplevel(root)
     newWindow.title("BEM VINDO!")
     newWindow.geometry("660x390")
@@ -152,32 +155,135 @@ def janela_chat():
     app_b.place(x=50, y=330)
 
     ### Botões do tabuleiro
-    b_1 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
-                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada())
-    b_1.place(x=50, y=93)
-    b_2 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
-                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
-    b_2.place(x=90, y=93)
-    b_3 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
-                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
-    b_3.place(x=130, y=93)
-    b_4 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
-                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
-    b_4.place(x=170, y=93)
-    b_5 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
-                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
-    b_5.place(x=210, y=93)
-    b_6 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
-                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE)
-    b_6.place(x=250, y=93)
+    b1 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(1))
+    b1.place(x=50, y=93)
+    b2 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(2))
+    b2.place(x=90, y=93)
+    b3 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(3))
+    b3.place(x=130, y=93)
+    b4 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(4))
+    b4.place(x=170, y=93)
+    b5 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(5))
+    b5.place(x=210, y=93)
+    b6 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(6))
+    b6.place(x=250, y=93)
 
+    b7 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(7))
+    b7.place(x=50, y=133)
+    b8 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(8))
+    b8.place(x=90, y=133)
+    b9 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(9))
+    b9.place(x=130, y=133)
+    b10 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(10))
+    b10.place(x=170, y=133)
+    b11 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(11))
+    b11.place(x=210, y=133)
+    b12 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(12))
+    b12.place(x=250, y=133)
 
-def efetuar_jogada():
+    b13 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(13))
+    b13.place(x=50, y=173)
+    b14 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(14))
+    b14.place(x=90, y=173)
+    b15 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(15))
+    b15.place(x=130, y=173)
+    b16 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(16))
+    b16.place(x=170, y=173)
+    b17 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(17))
+    b17.place(x=210, y=173)
+    b18 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(18))
+    b18.place(x=250, y=173)
+
+    b19 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(19))
+    b19.place(x=50, y=213)
+    b20 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(20))
+    b20.place(x=90, y=213)
+    b21 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(21))
+    b21.place(x=130, y=213)
+    b22 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(22))
+    b22.place(x=170, y=213)
+    b23 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(23))
+    b23.place(x=210, y=213)
+    b24 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(24))
+    b24.place(x=250, y=213)
+
+    b25 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(25))
+    b25.place(x=50, y=253)
+    b26 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(26))
+    b26.place(x=90, y=253)
+    b27 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(27))
+    b27.place(x=130, y=253)
+    b28 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(28))
+    b28.place(x=170, y=253)
+    b29 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(29))
+    b29.place(x=210, y=253)
+    b30 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(30))
+    b30.place(x=250, y=253)
+
+    b31 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(31))
+    b31.place(x=50, y=293)
+    b32 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(32))
+    b32.place(x=90, y=293)
+    b33 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(33))
+    b33.place(x=130, y=293)
+    b34 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(34))
+    b34.place(x=170, y=293)
+    b35 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(35))
+    b35.place(x=210, y=293)
+    b36 = Button(frame_tabuleiro, text="", width=1, height=1, bg="#000000", fg="#000000",
+                font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(36))
+    b36.place(x=250, y=293)
+
+def efetuar_jogada(posicao):
+    #b1['fg'] = cors[0]
+    #b1['bg'] = cors[0]
+    print(cors[0])
     print("Efetuar jogada")
+
+    sendMessage('{"event":"JOGADA1", "posicao":"' + str(posicao) + '"}')
+
 
 
 def receiveMessage():
     global text_area_chat
+    global b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, \
+        b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36
+
     while True:
         try:
             message = client.recv(2048).decode('ascii')
@@ -189,6 +295,17 @@ def receiveMessage():
                 usernames.append(username)
             elif jsonData['event'] == 'CHAT':
                 text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
+            elif jsonData['event'] == 'JOGADA1':
+                posicao = jsonData['posicao']
+                globals()[f"p{posicao}"] = posicao
+                globals()[f"b{posicao}"]['bg'] = cors[0]
+                globals()[f"b{posicao}"]['fg'] = cors[0]
+
+                print("Teste1")
+                #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
+            elif jsonData['event'] == 'JOGADA2':
+                print("Teste2")
+                #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
             else:
                 print("Else")
         except:
