@@ -63,7 +63,8 @@ def conexao(text_area):
             # Adicionando a conexao a uma lista
             print(f"Nova conexao no endereco: {str(address)}")
             clients.append(client)
-            client.send('{"event":"getUser"}'.encode('ascii'))
+            response = '{"event":"getUser", "index": "'+str(clients.index(client))+'"}'
+            client.send(response.encode('ascii'))
             username = client.recv(2048).decode('ascii')
             usernames.append(username)
 

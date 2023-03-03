@@ -21,7 +21,6 @@ root.withdraw()
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 text_area_chat = ScrolledText()
 b1 = b2 = b3 = b4 = b5 = b6 = Button()
-username = ''
 
 
 def conexao_cliente():
@@ -269,20 +268,40 @@ def janela_chat():
                 font=('Ivy 15 bold'), relief=FLAT, overrelief=RIDGE, command=lambda: efetuar_jogada(36))
     b36.place(x=250, y=293)
 
-def efetuar_jogada(posicao):
-    #b1['fg'] = cors[0]
-    #b1['bg'] = cors[0]
-    print(cors[0])
-    print("Efetuar jogada")
+    #BG cor de fundo  FG cor da letra
+    label_peca = Label(frame_tabuleiro, text="Você possui 8 peças em mãos", height=1, padx=0, relief="flat", anchor="center", font=('Ivy 7 bold'),
+                   bg="#808080", fg="#FFFFFF")
+    label_peca.place(x=50, y=340)
 
-    sendMessage('{"event":"JOGADA1", "posicao":"' + str(posicao) + '"}')
+def efetuar_jogada(posicao):
+    global peca_disponivel, numero_jogador, ultima_jogada
+    if(peca_disponivel == 0):
+        janela_aviso()
+        print("Você nao tem mais peça disponivel")
+    else:
+        if int(numero_jogador) == int(ultima_jogada):
+            print("Nao é sua vez de jogar, aguarde o próximo jogador")
+        else:
+            peca_disponivel -= 1
+            sendMessage('{"event":"JOGADA1", "posicao":"' + str(posicao) + '"}')
+            valida_empurrao(posicao)
+
+
+def valida_empurrao(posicao):
+    print("POSICOES")
+    print(p1, p2, p3, p4, p5, p6)
+
+    #Movendo o topo
+    if (int(posicao) - 6) > 0 and (int(posicao) - 12) > 0 and globals()[f"p{(int(posicao) - 6)}"] != -1 and globals()[f"p{(int(posicao) - 12)}"] == -1:
+        print("Peça precisa ser movida")
+        #sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao-6) + '", "posicaofinal": "' + str(posicao-6) +'"}')
+
+
 
 
 
 def receiveMessage():
-    global text_area_chat
-    global b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, \
-        b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36
+    global text_area_chat, numero_jogador, ultima_jogada
 
     while True:
         try:
@@ -293,18 +312,23 @@ def receiveMessage():
             if jsonData['event'] == 'getUser':
                 client.send(username.encode('ascii'))
                 usernames.append(username)
+                numero_jogador = jsonData['index']
+                print("Novo numero do jogador")
+                print(numero_jogador)
+
             elif jsonData['event'] == 'CHAT':
                 text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
+
             elif jsonData['event'] == 'JOGADA1':
                 posicao = jsonData['posicao']
+                ultima_jogada = jsonData['index']
                 globals()[f"p{posicao}"] = posicao
-                globals()[f"b{posicao}"]['bg'] = cors[0]
-                globals()[f"b{posicao}"]['fg'] = cors[0]
+                globals()[f"b{posicao}"]['bg'] = cors[jsonData['index']]
+                globals()[f"b{posicao}"]['fg'] = cors[jsonData['index']]
+                globals()[f"p{posicao}"] = jsonData['index']
 
-                print("Teste1")
-                #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
             elif jsonData['event'] == 'JOGADA2':
-                print("Teste2")
+                print("JOGADA2")
                 #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
             else:
                 print("Else")
@@ -315,6 +339,27 @@ def receiveMessage():
 
 def sendMessage(message):
     client.send(message.encode('ascii'))
+
+
+
+# JANELAS
+def janela_aviso():
+    newWindow = Toplevel(root)
+    newWindow.title("Servidor: Aviso!")
+    newWindow.geometry("360x205")
+
+    nao_button = Button(newWindow, text='OK', width=12, command=lambda:action_nao(newWindow))
+    nao_button.place(x=240, y=154)
+
+
+def action_nao(Toplevel):
+    Toplevel.destroy()
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
