@@ -5,6 +5,9 @@ username = ''
 numero_jogador = -1
 cors = ["#1E90FF","#D2691E"]
 
+DEFAULT_ENCODING = "utf-8"
+#DEFAULT_ENCODING = "ascii"
+
 #Variaveis do jogo
 peca_disponivel = 8
 ultima_jogada = -1

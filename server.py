@@ -28,28 +28,31 @@ def get_usernames(jogador_logado_socket):
     return usernames[clients.index(jogador_logado_socket)]
 
 def globalMessage(message):
-    print('Mensagem recebida no global')
+    print("globalMessage: " + str(message))
     for client in clients:
         client.send(message)
 
 def handleMessages(client):
     while True:
         try:
-            print('Mensagem recebida no handle Mensage')
-            mensagemRecebida = client.recv(2048).decode('ascii')
-            jsonData = json.loads(mensagemRecebida)
-            jsonData['name'] = usernames[clients.index(client)]
-            jsonData['index'] = clients.index(client)
-            mensagemRecebida = json.dumps(jsonData)
-            globalMessage(f'{mensagemRecebida}'.encode('ascii'))
-            #globalMessage(f'{usernames[clients.index(client)]} :{mensagemRecebida}'.encode('ascii'))
+            mensagemRecebida = client.recv(2048).decode(DEFAULT_ENCODING)
+            entrada = []
+            for i in list(mensagemRecebida):
+                entrada.append(i)
+                if(i == '}'):
+                    print("handleMessage: " + str("".join(entrada)))
+                    jsonData = json.loads(str("".join(entrada)))
+                    jsonData['name'] = usernames[clients.index(client)]
+                    jsonData['index'] = clients.index(client)
+                    resultMessage = json.dumps(jsonData)
+                    globalMessage(f'{resultMessage}'.encode(DEFAULT_ENCODING))
+                    entrada = []
         except:
             clientLeaved = clients.index(client)
             client.close()
             clients.remove(clients[clientLeaved])
             clientLeavedUsername = usernames[clientLeaved]
             print(f'{clientLeavedUsername} saiu do chat...')
-            #globalMessage(f'{clientLeavedUsername} nos deixou...'.encode('ascii'))
             usernames.remove(clientLeavedUsername)
 
 
@@ -64,13 +67,13 @@ def conexao(text_area):
             print(f"Nova conexao no endereco: {str(address)}")
             clients.append(client)
             response = '{"event":"getUser", "index": "'+str(clients.index(client))+'"}'
-            client.send(response.encode('ascii'))
-            username = client.recv(2048).decode('ascii')
+            client.send(response.encode(DEFAULT_ENCODING))
+            username = client.recv(2048).decode(DEFAULT_ENCODING)
             usernames.append(username)
 
             # Printa no terminal e no servidor
-            text_area.insert(tk.INSERT, f'{username} acaba de entrar no chat!\n'.encode('ascii'))
-            #globalMessage(f'{"event":"CHAT, "message": {username} acaba de entrar no chat!}\n'.encode('ascii'))
+            text_area.insert(tk.INSERT, f'{username} acaba de entrar no chat!\n'.encode(DEFAULT_ENCODING))
+            #globalMessage(f'{"event":"CHAT, "message": {username} acaba de entrar no chat!}\n'.encode(DEFAULT_ENCODING))
 
             user_thread = threading.Thread(target=handleMessages,args=(client,))
             user_thread.start()

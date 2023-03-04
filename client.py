@@ -288,13 +288,25 @@ def efetuar_jogada(posicao):
 
 
 def valida_empurrao(posicao):
-    print("POSICOES")
-    print(p1, p2, p3, p4, p5, p6)
-
-    #Movendo o topo
+    #Movendo a peça superior
     if (int(posicao) - 6) > 0 and (int(posicao) - 12) > 0 and globals()[f"p{(int(posicao) - 6)}"] != -1 and globals()[f"p{(int(posicao) - 12)}"] == -1:
-        print("Peça precisa ser movida")
-        #sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao-6) + '", "posicaofinal": "' + str(posicao-6) +'"}')
+        print("Peça precisa ser movida para cima")
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao-6) + '", "posicaofinal": "' + str(posicao-12) +'", "value": "' + str(globals()[f"p{(int(posicao) - 6)}"]) +'"}')
+
+    # Movendo a peça inferior
+    if (int(posicao) + 6) > 0 and (int(posicao) + 12) > 0 and globals()[f"p{(int(posicao) + 6)}"] != -1 and globals()[f"p{(int(posicao) + 12)}"] == -1:
+        print("Peça precisa ser movida para baixo")
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao+6) + '", "posicaofinal": "' + str(posicao+12) +'", "value": "' + str(globals()[f"p{(int(posicao) + 6)}"]) +'"}')
+
+    # Movendo a peça esquerda
+    if (int(posicao) - 1) > 0 and (int(posicao) - 2) > 0 and globals()[f"p{(int(posicao) - 1)}"] != -1 and globals()[f"p{(int(posicao) - 2)}"] == -1:
+        print("Peça precisa ser movida para esquerda")
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao-1) + '", "posicaofinal": "' + str(posicao-2) +'", "value": "' + str(globals()[f"p{(int(posicao) - 1)}"]) +'"}')
+
+    # Movendo a peça direita
+    if (int(posicao) + 1) > 0 and (int(posicao) + 2) > 0 and globals()[f"p{(int(posicao) + 1)}"] != -1 and globals()[f"p{(int(posicao) + 2)}"] == -1:
+        print("Peça precisa ser movida para direita")
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao+1) + '", "posicaofinal": "' + str(posicao+2) +'", "value": "' + str(globals()[f"p{(int(posicao) + 1)}"]) +'"}')
 
 
 
@@ -305,40 +317,64 @@ def receiveMessage():
 
     while True:
         try:
-            message = client.recv(2048).decode('ascii')
-            print(message)
-            jsonData = json.loads(message)
-            print(jsonData)
-            if jsonData['event'] == 'getUser':
-                client.send(username.encode('ascii'))
-                usernames.append(username)
-                numero_jogador = jsonData['index']
-                print("Novo numero do jogador")
-                print(numero_jogador)
+            message = client.recv(2048).decode(DEFAULT_ENCODING)
+            entrada = []
+            for i in list(message):
+                entrada.append(i)
+                if(i == '}'):
+                    #print(message)
+                    jsonData = json.loads(str("".join(entrada)))
+                    print("ReceiveMessageClient")
+                    print(jsonData)
+                    if jsonData['event'] == 'getUser':
+                        client.send(username.encode(DEFAULT_ENCODING))
+                        usernames.append(username)
+                        numero_jogador = jsonData['index']
+                        #print("Novo numero do jogador")
+                        #print(numero_jogador)
 
-            elif jsonData['event'] == 'CHAT':
-                text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
+                    elif jsonData['event'] == 'CHAT':
+                        text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
 
-            elif jsonData['event'] == 'JOGADA1':
-                posicao = jsonData['posicao']
-                ultima_jogada = jsonData['index']
-                globals()[f"p{posicao}"] = posicao
-                globals()[f"b{posicao}"]['bg'] = cors[jsonData['index']]
-                globals()[f"b{posicao}"]['fg'] = cors[jsonData['index']]
-                globals()[f"p{posicao}"] = jsonData['index']
+                    elif jsonData['event'] == 'JOGADA1':
+                        posicao = jsonData['posicao']
+                        ultima_jogada = jsonData['index']
+                        globals()[f"b{posicao}"]['bg'] = cors[jsonData['index']]
+                        globals()[f"b{posicao}"]['fg'] = cors[jsonData['index']]
+                        globals()[f"p{posicao}"] = jsonData['index']
 
-            elif jsonData['event'] == 'JOGADA2':
-                print("JOGADA2")
-                #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
-            else:
-                print("Else")
+                    elif jsonData['event'] == 'JOGADA2':
+                        print("JOGADA2")
+                        #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
+
+                    elif jsonData['event'] == 'MOVEPECA':
+                        posicaoinicial = int(jsonData['posicaoinicial'])
+                        posicaofinal = int(jsonData['posicaofinal'])
+                        #Setando casa nova
+                        #print("SETANDO CASA NOVA")
+                        globals()[f"b{posicaofinal}"]['bg'] = cors[int(jsonData['value'])]
+                        globals()[f"b{posicaofinal}"]['fg'] = cors[int(jsonData['value'])]
+                        globals()[f"p{posicaofinal}"] = int(jsonData['value'])
+                        #print("CASA NOVA SETADA")
+
+                        # Liberando casa antiga
+                        #print("ZERANDO CASA INICIAL")
+                        globals()[f"b{posicaoinicial}"]['bg'] = "#000000"
+                        globals()[f"b{posicaoinicial}"]['fg'] = "#000000"
+                        globals()[f"p{posicaoinicial}"] = -1
+                        #print("CASA INICIAL ZERADA")
+
+                    else:
+                        print("Else")
+
+                    entrada = []
         except:
             print('ERROR: Check your connection or server might be offline')
             exit()
 
 
-def sendMessage(message):
-    client.send(message.encode('ascii'))
+def sendMessage(message = ''):
+    client.send(message.encode(DEFAULT_ENCODING))
 
 
 
