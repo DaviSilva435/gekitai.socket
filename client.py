@@ -20,6 +20,7 @@ root.withdraw()
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 text_area_chat = ScrolledText()
+label_peca = Label()
 b1 = b2 = b3 = b4 = b5 = b6 = Button()
 
 
@@ -69,7 +70,7 @@ def conectar_jogador(jogador_name_input, toplevel):
 
 
 def janela_chat():
-    global text_area_chat
+    global text_area_chat, label_peca
     global b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,b16,b17,b18,b19,b20,b21,b22,b23,b24,\
         b25,b26,b27,b28,b29,b30,b31,b32,b33,b34,b35,b36
     newWindow = Toplevel(root)
@@ -269,7 +270,7 @@ def janela_chat():
     b36.place(x=250, y=293)
 
     #BG cor de fundo  FG cor da letra
-    label_peca = Label(frame_tabuleiro, text="Você possui 8 peças em mãos", height=1, padx=0, relief="flat", anchor="center", font=('Ivy 7 bold'),
+    label_peca = Label(frame_tabuleiro, text="Peças disponíveis: 8", height=1, padx=0, relief="flat", anchor="center", font=('Ivy 15 bold'),
                    bg="#808080", fg="#FFFFFF")
     label_peca.place(x=50, y=340)
 
@@ -289,31 +290,76 @@ def efetuar_jogada(posicao):
 
 def valida_empurrao(posicao):
     #Movendo a peça superior
-    if (int(posicao) - 6) > 0 and (int(posicao) - 12) > 0 and globals()[f"p{(int(posicao) - 6)}"] != -1 and globals()[f"p{(int(posicao) - 12)}"] == -1:
-        print("Peça precisa ser movida para cima")
+    if (int(posicao) - 6 ) < 0:
+        pass
+    elif (int(posicao) - 12) < 0 and globals()[f"p{(int(posicao) - 6)}"] != -1:
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao - 6) + '", "value": "' + str(globals()[f"p{(int(posicao) - 6)}"]) + '"}')
+    elif (int(posicao) - 6) > 0 and (int(posicao) - 12) > 0 and globals()[f"p{(int(posicao) - 6)}"] != -1 and globals()[f"p{(int(posicao) - 12)}"] == -1:
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao-6) + '", "posicaofinal": "' + str(posicao-12) +'", "value": "' + str(globals()[f"p{(int(posicao) - 6)}"]) +'"}')
 
     # Movendo a peça inferior
-    if (int(posicao) + 6) > 0 and (int(posicao) + 12) > 0 and globals()[f"p{(int(posicao) + 6)}"] != -1 and globals()[f"p{(int(posicao) + 12)}"] == -1:
-        print("Peça precisa ser movida para baixo")
+    if (int(posicao) + 6 ) > 36:
+        pass
+    elif (int(posicao) + 12) > 36 and globals()[f"p{(int(posicao) + 6)}"] != -1:
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao + 6) + '", "value": "' + str(globals()[f"p{(int(posicao) + 6)}"]) + '"}')
+    elif (int(posicao) + 6) > 0 and (int(posicao) + 12) > 0 and globals()[f"p{(int(posicao) + 6)}"] != -1 and globals()[f"p{(int(posicao) + 12)}"] == -1:
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao+6) + '", "posicaofinal": "' + str(posicao+12) +'", "value": "' + str(globals()[f"p{(int(posicao) + 6)}"]) +'"}')
 
     # Movendo a peça esquerda
-    if (int(posicao) - 1) > 0 and (int(posicao) - 2) > 0 and globals()[f"p{(int(posicao) - 1)}"] != -1 and globals()[f"p{(int(posicao) - 2)}"] == -1:
-        print("Peça precisa ser movida para esquerda")
+    if (int(posicao-1) % 6) == 1 and globals()[f"p{(int(posicao) - 1)}"] != -1:
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao - 1) + '", "value": "' + str(globals()[f"p{(int(posicao) - 1)}"]) + '"}')
+    elif (int(posicao) - 1) > 0 and (int(posicao) - 2) > 0 and globals()[f"p{(int(posicao) - 1)}"] != -1 and globals()[f"p{(int(posicao) - 2)}"] == -1:
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao-1) + '", "posicaofinal": "' + str(posicao-2) +'", "value": "' + str(globals()[f"p{(int(posicao) - 1)}"]) +'"}')
 
     # Movendo a peça direita
-    if (int(posicao) + 1) > 0 and (int(posicao) + 2) > 0 and globals()[f"p{(int(posicao) + 1)}"] != -1 and globals()[f"p{(int(posicao) + 2)}"] == -1:
-        print("Peça precisa ser movida para direita")
+    if (int(posicao+1) % 6) == 0 and globals()[f"p{(int(posicao) + 1)}"] != -1:
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao + 1) + '", "value": "' + str(globals()[f"p{(int(posicao) + 1)}"]) + '"}')
+    elif (int(posicao) + 1) > 0 and (int(posicao) + 2) > 0 and globals()[f"p{(int(posicao) + 1)}"] != -1 and \
+            globals()[f"p{(int(posicao) + 2)}"] == -1:
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao+1) + '", "posicaofinal": "' + str(posicao+2) +'", "value": "' + str(globals()[f"p{(int(posicao) + 1)}"]) +'"}')
 
+    # Movendo a peça diagonal superior esquerda
+    if ((int(posicao) - 7) < 0):
+        pass
+    elif ((int(posicao) - 14) < 0 and globals()[f"p{(int(posicao) - 7)}"] != -1) or ((int(posicao-7) % 6) == 1 and globals()[f"p{(int(posicao) - 7)}"] != -1):
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao - 7) + '", "value": "' + str(globals()[f"p{(int(posicao) - 7)}"]) + '"}')
+    elif (int(posicao) - 7) > 0 and (int(posicao) - 14) > 0 and globals()[f"p{(int(posicao) - 7)}"] != -1 and \
+            globals()[f"p{(int(posicao) - 14)}"] == -1:
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao - 7) + '", "posicaofinal": "' + str(
+            posicao - 14) + '", "value": "' + str(globals()[f"p{(int(posicao) - 7)}"]) + '"}')
 
+    # Movendo a peça diagonal superior direita
+    if ((int(posicao) - 5) < 0):
+        pass
+    elif ((int(posicao) - 10) < 0 and globals()[f"p{(int(posicao) - 5)}"] != -1) or ((int(posicao-5) % 6) == 0 and globals()[f"p{(int(posicao) - 5)}"] != -1):
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao - 5) + '", "value": "' + str(globals()[f"p{(int(posicao) - 5)}"]) + '"}')
+    elif (int(posicao) -5) > 0 and (int(posicao) - 10) > 0 and globals()[f"p{(int(posicao) - 5)}"] != -1 and \
+            globals()[f"p{(int(posicao) - 10)}"] == -1:
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao - 5) + '", "posicaofinal": "' + str(
+            posicao - 10) + '", "value": "' + str(globals()[f"p{(int(posicao) - 5)}"]) + '"}')
 
+    # Movendo a peça diagonal inferior esquerda
+    if ((int(posicao) + 5) > 36):
+        pass
+    elif ((int(posicao) + 10) > 36 and globals()[f"p{(int(posicao) + 5)}"] != -1) or ((int(posicao+5) % 6) == 0 and globals()[f"p{(int(posicao) + 5)}"] != -1):
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao + 5) + '", "value": "' + str(globals()[f"p{(int(posicao) + 5)}"]) + '"}')
+    elif (int(posicao) + 5) < 36 and (int(posicao) + 10) < 36 and globals()[f"p{(int(posicao) + 5)}"] != -1 and globals()[f"p{(int(posicao) + 10)}"] == -1:
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao + 5) + '", "posicaofinal": "' + str(
+            posicao + 10) + '", "value": "' + str(globals()[f"p{(int(posicao) + 5)}"]) + '"}')
+
+    # Movendo a peça diagonal inferior direita
+    if ((int(posicao) + 7) > 36):
+        pass
+    elif ((int(posicao) + 14) > 36 and globals()[f"p{(int(posicao) + 7)}"] != -1) or ((int(posicao+7) % 6) == 0 and globals()[f"p{(int(posicao) + 7)}"] != -1):
+        sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao + 7) + '", "value": "' + str(globals()[f"p{(int(posicao) + 7)}"]) + '"}')
+    elif (int(posicao) + 7) < 36 and (int(posicao) + 14) < 36 and globals()[f"p{(int(posicao) + 7)}"] != -1 and globals()[
+        f"p{(int(posicao) + 14)}"] == -1:
+        sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao + 7) + '", "posicaofinal": "' + str(
+            posicao + 14) + '", "value": "' + str(globals()[f"p{(int(posicao) + 7)}"]) + '"}')
 
 
 def receiveMessage():
-    global text_area_chat, numero_jogador, ultima_jogada
+    global text_area_chat, numero_jogador, ultima_jogada, label_peca, peca_disponivel
 
     while True:
         try:
@@ -343,6 +389,8 @@ def receiveMessage():
                         globals()[f"b{posicao}"]['fg'] = cors[jsonData['index']]
                         globals()[f"p{posicao}"] = jsonData['index']
 
+                        label_peca['text'] = "Peças disponíveis: " + str(peca_disponivel)
+
                     elif jsonData['event'] == 'JOGADA2':
                         print("JOGADA2")
                         #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
@@ -351,18 +399,25 @@ def receiveMessage():
                         posicaoinicial = int(jsonData['posicaoinicial'])
                         posicaofinal = int(jsonData['posicaofinal'])
                         #Setando casa nova
-                        #print("SETANDO CASA NOVA")
                         globals()[f"b{posicaofinal}"]['bg'] = cors[int(jsonData['value'])]
                         globals()[f"b{posicaofinal}"]['fg'] = cors[int(jsonData['value'])]
                         globals()[f"p{posicaofinal}"] = int(jsonData['value'])
-                        #print("CASA NOVA SETADA")
-
                         # Liberando casa antiga
-                        #print("ZERANDO CASA INICIAL")
                         globals()[f"b{posicaoinicial}"]['bg'] = "#000000"
                         globals()[f"b{posicaoinicial}"]['fg'] = "#000000"
                         globals()[f"p{posicaoinicial}"] = -1
-                        #print("CASA INICIAL ZERADA")
+
+                    elif jsonData['event'] == 'MOVEPECAPARAMAO':
+                        posicaoinicial = int(jsonData['posicaoinicial'])
+                        if(jsonData['value'] == numero_jogador):
+                            peca_disponivel += 1
+                        # Liberando casa antiga
+                        globals()[f"b{posicaoinicial}"]['bg'] = "#000000"
+                        globals()[f"b{posicaoinicial}"]['fg'] = "#000000"
+                        globals()[f"p{posicaoinicial}"] = -1
+
+                        label_peca['text'] = "Peças disponíveis: " + str(peca_disponivel)
+
 
                     else:
                         print("Else")
