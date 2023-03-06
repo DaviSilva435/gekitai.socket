@@ -28,11 +28,12 @@ def conexao_cliente():
     newWindow = Toplevel(root)
     newWindow.title("INICIAR JOGO")
     newWindow.geometry("300x150")
+    newWindow.config(bg="#4F4F4F")
 
     newWindow.protocol("WM_DELETE_WINDOW", lambda: fecha_janela(newWindow))
 
     # BG cor de fundo  FG cor da letra
-    label_nome_cliente = Label(newWindow, text="Digite seu nome:", font=('Ivy 15 bold'), fg="#000000")
+    label_nome_cliente = Label(newWindow, text="DIGITE SEU NOME:", font=('Ivy 15 bold'), fg="#FFFFFF", bg="#4F4F4F")
     label_nome_cliente.place(x=40, y=20)
 
     jogador_name_input = Entry(newWindow, width=27)
@@ -286,9 +287,13 @@ def janela_chat():
                     bg="#3b3b3b",fg="#FFFFFF")
     label_peca.place(x=85, y=45)
 
+    nao_button = Button(frame_tabuleiro, text='DESISTIR', width=12, command=lambda: janela_confirmacao("Tem certeza que irá desistir?\n O outro jogador será o vencedor!"))
+    nao_button.place(x=110, y=350)
+
 def efetuar_jogada(posicao):
     global peca_disponivel, numero_jogador, ultima_jogada
     if int(numero_jogador) == int(ultima_jogada):
+        janela_aviso("Nao é sua vez de jogar,\n aguarde o próximo jogador")
         print("Nao é sua vez de jogar, aguarde o próximo jogador")
     else:
         peca_disponivel -= 1
@@ -373,11 +378,11 @@ def valida_vencedor():
     if peca_disponivel == 0:
         sendMessage('{"event":"VENCEDORPORPECA"}')
     else:
+        # Valida vencedor em linha
         i = 1
         while i < 35:
             #print("Comparando",str(i), str(i +1), str(i+2))
             if((globals()[f"p{(int(i))}"] == globals()[f"p{(i+1)}"] == globals()[f"p{(i+2)}"]) and globals()[f"p{(i)}"] != -1):
-                i += 1
                 print("Vencedor em linha")
                 if(globals()[f"p{(int(i))}"] == numero_jogador):
                     print("Vencedor1 ganhou")
@@ -398,7 +403,6 @@ def valida_vencedor():
             #print("Comparando",str(i), str(i +6), str(i+12))
             if ((globals()[f"p{(int(i))}"] == globals()[f"p{(i + 6)}"] == globals()[f"p{(i + 12)}"]) and globals()[
                 f"p{(i)}"] != -1):
-                i += 1
                 if (globals()[f"p{(int(i))}"] == numero_jogador):
                     vencedor1 = globals()[f"p{(int(i))}"]
                 else:
@@ -412,7 +416,6 @@ def valida_vencedor():
             #print("Comparando",str(i), str(i+7), str(i+14))
             if ((globals()[f"p{(int(i))}"] == globals()[f"p{(i + 7)}"] == globals()[f"p{(i + 14)}"]) and globals()[
                 f"p{(i)}"] != -1):
-                i += 1
                 if (globals()[f"p{(int(i))}"] == numero_jogador):
                     vencedor1 = globals()[f"p{(int(i))}"]
                 else:
@@ -429,12 +432,10 @@ def valida_vencedor():
             #print("Comparando",str(i), str(i+5), str(i+10))
             if ((globals()[f"p{(int(i))}"] == globals()[f"p{(i + 5)}"] == globals()[f"p{(i + 10)}"]) and globals()[
                 f"p{(i)}"] != -1):
-                i += 1
                 if (globals()[f"p{(int(i))}"] == numero_jogador):
                     vencedor1 = globals()[f"p{(int(i))}"]
                 else:
                     vencedor2 = globals()[f"p{(int(i))}"]
-                print("Vencedor em diagonal inversa")
             if ((i % 6) == 0):
                 i = i + 3
             else:
@@ -499,30 +500,28 @@ def receiveMessage():
 
                     elif jsonData['event'] == 'VENCEDORPORPECA':
                         if(int(jsonData['index']) == int(numero_jogador)):
+                            janela_resultado("Parabéns! Você ganhou!\n " +str(username))
                             print("Você ganhou")
                         else:
-                            print("Você perdeu")
+                            janela_resultado("Não foi dessa vez!\nVocê perdeu!\n " +str(username))
+                            print("Não foi dessa vez!\nVocê perdeu!\n " +str(username))
 
                     elif jsonData['event'] == 'VENCEDOR':
                         print("Numero Jogador ",str(numero_jogador))
                         if int(jsonData['vencedor1']) != -1 and int(jsonData['vencedor2']) != -1:
                             print("Os dois jogadores ganharam na mesma jogada, é necessário validar quem jogou")
                             if int(numero_jogador) == int(ultima_jogada):
+                                janela_resultado("Parabéns! Você ganhou!\n " +str(username))
                                 print("Você ganhou")
                             else:
+                                janela_resultado("Não foi dessa vez!\nVocê perdeu!\n " +str(username))
                                 print("Voce perdeu")
                         elif int(jsonData['vencedor1']) != -1 or int(jsonData['vencedor2']) != -1:
-                            print("----------------------------------------------")
-                            print(int(jsonData['vencedor1']))
-                            print(int(jsonData['vencedor2']))
-                            print(numero_jogador)
-                            if int(jsonData['vencedor1']) == numero_jogador or int(
-                                    jsonData['vencedor2']) == numero_jogador:
-                                print("Entrou na bagaça")
-                            print("----------------------------------------------")
                             if int(jsonData['vencedor1']) == int(numero_jogador) or int(jsonData['vencedor2']) == int(numero_jogador):
+                                janela_resultado("Parabéns! Você ganhou!\n " +str(username))
                                 print("Voce ganhou")
                             else:
+                                janela_resultado("Não foi dessa vez!\nVocê perdeu!\n " +str(username))
                                 print("Voce perdeu")
 
                     else:
@@ -538,14 +537,61 @@ def sendMessage(message = ''):
     client.send(message.encode(DEFAULT_ENCODING))
 
 # JANELAS
-def janela_aviso():
+def janela_aviso(message):
     newWindow = Toplevel(root)
-    newWindow.title("Servidor: Aviso!")
+    newWindow.title("Aviso!")
     newWindow.geometry("360x205")
 
-    nao_button = Button(newWindow, text='OK', width=12, command=lambda:action_nao(newWindow))
-    nao_button.place(x=240, y=154)
+    #bg="#3b3b3b",
+    label_peca = Label(newWindow, text=str(message), height=4, padx=0, relief="flat", anchor="center",
+                       font=('Ivy 10 bold'),
+                        fg="#000000")
+    label_peca.place(x=80, y=45)
 
+    nao_button = Button(newWindow, text='OK', width=12, command=lambda:action_ok(newWindow))
+    nao_button.place(x=130, y=150)
+
+
+def action_ok(Toplevel):
+    Toplevel.destroy()
+
+
+def janela_resultado(message):
+    newWindow = Toplevel(root)
+    newWindow.title("Resultado!")
+    newWindow.geometry("360x205")
+
+    #bg="#3b3b3b",
+    label_peca = Label(newWindow, text=str(message), height=4, padx=0, relief="flat", anchor="center",
+                       font=('Ivy 10 bold'),
+                        fg="#000000")
+    label_peca.place(x=80, y=45)
+
+    nao_button = Button(newWindow, text='OK', width=12, command=lambda:action_sim(newWindow))
+    nao_button.place(x=130, y=150)
+
+
+
+def janela_confirmacao(message):
+    newWindow = Toplevel(root)
+    newWindow.title("Confirma!")
+    newWindow.geometry("360x205")
+
+    label_peca = Label(newWindow, text=str(message), height=4, padx=0, relief="flat", anchor="center",
+                       font=('Ivy 10 bold'),
+                        fg="#000000")
+    label_peca.place(x=50, y=45)
+
+    sim_button = Button(newWindow, text='SIM', width=12, command=lambda:action_sim(newWindow))
+    sim_button.place(x=50, y=154)
+
+    nao_button = Button(newWindow, text='NÃO', width=12, command=lambda:action_nao(newWindow))
+    nao_button.place(x=180, y=154)
+
+def action_sim(Toplevel):
+    Toplevel.destroy()
+    Toplevel.quit()
+    root.destroy()
 
 def action_nao(Toplevel):
     Toplevel.destroy()
