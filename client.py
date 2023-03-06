@@ -27,20 +27,21 @@ b1 = b2 = b3 = b4 = b5 = b6 = Button()
 def conexao_cliente():
     newWindow = Toplevel(root)
     newWindow.title("INICIAR JOGO")
-    newWindow.geometry("280x155")
+    newWindow.geometry("300x150")
 
     newWindow.protocol("WM_DELETE_WINDOW", lambda: fecha_janela(newWindow))
 
-    label_nome_cliente = Label(newWindow, width=276, height=151)
-    label_nome_cliente.place(x=0, y=0)
+    # BG cor de fundo  FG cor da letra
+    label_nome_cliente = Label(newWindow, text="Digite seu nome:", font=('Ivy 15 bold'), fg="#000000")
+    label_nome_cliente.place(x=40, y=20)
 
     jogador_name_input = Entry(newWindow, width=27)
-    jogador_name_input.place(x=98, y=62)
+    jogador_name_input.place(x=40, y=60)
 
     # https://python-forum.io/thread-26854.html <--- Como fazer o texto de um botão do tkinter ficar em Negrito
     jogar_button = Button(newWindow, text='JOGAR', font='sans 11 bold', width=12, height=int(1.5),
                           command=lambda: conectar_jogador(str(jogador_name_input.get()), newWindow))
-    jogar_button.place(x=140, y=96)
+    jogar_button.place(x=80, y=95)
 
 
 def fecha_janela(Toplevel):
@@ -78,24 +79,30 @@ def janela_chat():
     newWindow.geometry("660x390")
     #    newWindow.configure(bg="#3b3b3b")
 
-    frame_chat = Frame(newWindow, width=310, height=390, bg="#808080", pady=0, padx=0)
+    frame_chat = Frame(newWindow, width=310, height=390, bg="#4F4F4F", pady=0, padx=0)
     frame_chat.grid(row=1, column=0)
 
     #    newWindow.protocol("WM_DELETE_WINDOW", mostra_janela_SAIR_PARTIDA)
 
     # CHAT
     # Abaixo instanciamos o campo de texto aonde as mensagens são mostradas no chat.
-    text_area_chat = ScrolledText(frame_chat, wrap=WORD, width=38, height=12, font=("Callibri", 8))
-    text_area_chat.place(x=20, y=150)
+    text_area_chat = ScrolledText(frame_chat, wrap=WORD, width=38, height=15, font=("Callibri", 8))
+    text_area_chat.place(x=15, y=90)
     text_area_chat.focus()
 
-    label_mensagem = Entry(frame_chat, width=30)
+    #BG cor de fundo  FG cor da letra bg="#3b3b3b",
+    label_peca = Label(frame_chat, text="CHAT", height=1, padx=0, relief="flat", anchor="center",
+                       font=('Ivy 25 bold'),
+                    bg="#4F4F4F",fg="#FFFFFF")
+    label_peca.place(x=100, y=10)
+
+    label_mensagem = Entry(frame_chat, width=34)
     label_mensagem.pack(padx=10, pady=10)
-    label_mensagem.place(x=20, y=300)
+    label_mensagem.place(x=15, y=300)
 
     button_envia_mensagem = Button(frame_chat, text='ENVIAR', command=lambda: sendMessage(
         '{"event":"CHAT", "message":"' + str(label_mensagem.get()) + '"}'))
-    button_envia_mensagem.place(x=200, y=350)
+    button_envia_mensagem.place(x=120, y=330)
 
     text_area_chat.insert(tk.INSERT, f'Bem vindo ao chat {username}!\n', 'msg')
     text_area_chat.tag_config('msg', foreground='blue')
@@ -270,9 +277,14 @@ def janela_chat():
     b36.place(x=250, y=293)
 
     #BG cor de fundo  FG cor da letra
-    label_peca = Label(frame_tabuleiro, text="Peças disponíveis: 8", height=1, padx=0, relief="flat", anchor="center", font=('Ivy 15 bold'),
-                   bg="#808080", fg="#FFFFFF")
-    label_peca.place(x=50, y=340)
+    label_peca = Label(frame_tabuleiro, text="GEKITAI", height=1, padx=0, relief="flat", anchor="center",
+                       font=('Ivy 25 bold'),
+                       bg="#3b3b3b", fg="#FFFFFF")
+    label_peca.place(x=90, y=10)
+
+    label_peca = Label(frame_tabuleiro, text="Peças disponíveis: 8", height=1, padx=0, relief="flat", anchor="center", font=('Ivy 10 bold'),
+                    bg="#3b3b3b",fg="#FFFFFF")
+    label_peca.place(x=85, y=45)
 
 def efetuar_jogada(posicao):
     global peca_disponivel, numero_jogador, ultima_jogada
