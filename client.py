@@ -496,7 +496,8 @@ def receiveMessage():
                         label_peca['text'] = "Peças disponíveis: " + str(peca_disponivel)
 
                     elif jsonData['event'] == 'VALIDAVENCEDOR':
-                        valida_vencedor()
+                        if(int(jsonData['index']) == int(numero_jogador)):
+                            valida_vencedor()
 
                     elif jsonData['event'] == 'VENCEDORPORPECA':
                         if(int(jsonData['index']) == int(numero_jogador)):
