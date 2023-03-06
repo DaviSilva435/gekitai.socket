@@ -525,6 +525,10 @@ def receiveMessage():
                                 janela_resultado("Não foi dessa vez!\nVocê perdeu!\n " +str(username))
                                 print("Voce perdeu")
 
+                    elif jsonData['event'] == 'DESISTIR':
+                        if(int(jsonData['index']) != int(numero_jogador)):
+                            janela_resultado("Parabéns! Você ganhou!\n " + str(username))
+
                     else:
                         print("Foi enviado um objeto desconhecido e nao mapeado")
 
@@ -583,11 +587,17 @@ def janela_confirmacao(message):
                         fg="#000000")
     label_peca.place(x=50, y=45)
 
-    sim_button = Button(newWindow, text='SIM', width=12, command=lambda:action_sim(newWindow))
+    sim_button = Button(newWindow, text='SIM', width=12, command=lambda:action_desistir(newWindow))
     sim_button.place(x=50, y=154)
 
     nao_button = Button(newWindow, text='NÃO', width=12, command=lambda:action_nao(newWindow))
     nao_button.place(x=180, y=154)
+
+def action_desistir(Toplevel):
+    sendMessage('{"event":"DESISTIR"}')
+    Toplevel.destroy()
+    Toplevel.quit()
+    root.destroy()
 
 def action_sim(Toplevel):
     Toplevel.destroy()
