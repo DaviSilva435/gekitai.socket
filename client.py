@@ -276,21 +276,17 @@ def janela_chat():
 
 def efetuar_jogada(posicao):
     global peca_disponivel, numero_jogador, ultima_jogada
-    if(peca_disponivel == 0):
-        janela_aviso()
-        print("Você nao tem mais peça disponivel")
+    if int(numero_jogador) == int(ultima_jogada):
+        print("Nao é sua vez de jogar, aguarde o próximo jogador")
     else:
-        if int(numero_jogador) == int(ultima_jogada):
-            print("Nao é sua vez de jogar, aguarde o próximo jogador")
-        else:
-            peca_disponivel -= 1
-            sendMessage('{"event":"JOGADA1", "posicao":"' + str(posicao) + '"}')
-            valida_empurrao(posicao)
-
+        peca_disponivel -= 1
+        sendMessage('{"event":"JOGADA", "posicao":"' + str(posicao) + '"}')
+        valida_empurrao(posicao)
+        sendMessage('{"event":"VALIDAVENCEDOR"}')
 
 def valida_empurrao(posicao):
     #Movendo a peça superior
-    if (int(posicao) - 6 ) < 0:
+    if (int(posicao) - 6 ) <= 0:
         pass
     elif (int(posicao) - 12) < 0 and globals()[f"p{(int(posicao) - 6)}"] != -1:
         sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao - 6) + '", "value": "' + str(globals()[f"p{(int(posicao) - 6)}"]) + '"}')
@@ -300,7 +296,7 @@ def valida_empurrao(posicao):
     # Movendo a peça inferior
     if (int(posicao) + 6 ) > 36:
         pass
-    elif (int(posicao) + 12) > 36 and globals()[f"p{(int(posicao) + 6)}"] != -1:
+    elif (int(posicao) + 12) >= 36 and globals()[f"p{(int(posicao) + 6)}"] != -1:
         sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao + 6) + '", "value": "' + str(globals()[f"p{(int(posicao) + 6)}"]) + '"}')
     elif (int(posicao) + 6) > 0 and (int(posicao) + 12) > 0 and globals()[f"p{(int(posicao) + 6)}"] != -1 and globals()[f"p{(int(posicao) + 12)}"] == -1:
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao+6) + '", "posicaofinal": "' + str(posicao+12) +'", "value": "' + str(globals()[f"p{(int(posicao) + 6)}"]) +'"}')
@@ -319,7 +315,7 @@ def valida_empurrao(posicao):
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao+1) + '", "posicaofinal": "' + str(posicao+2) +'", "value": "' + str(globals()[f"p{(int(posicao) + 1)}"]) +'"}')
 
     # Movendo a peça diagonal superior esquerda
-    if ((int(posicao) - 7) < 0):
+    if ((int(posicao) - 7) <= 0):
         pass
     elif ((int(posicao) - 14) < 0 and globals()[f"p{(int(posicao) - 7)}"] != -1) or ((int(posicao-7) % 6) == 1 and globals()[f"p{(int(posicao) - 7)}"] != -1):
         sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao - 7) + '", "value": "' + str(globals()[f"p{(int(posicao) - 7)}"]) + '"}')
@@ -329,7 +325,7 @@ def valida_empurrao(posicao):
             posicao - 14) + '", "value": "' + str(globals()[f"p{(int(posicao) - 7)}"]) + '"}')
 
     # Movendo a peça diagonal superior direita
-    if ((int(posicao) - 5) < 0):
+    if ((int(posicao) - 5) <= 0):
         pass
     elif ((int(posicao) - 10) < 0 and globals()[f"p{(int(posicao) - 5)}"] != -1) or ((int(posicao-5) % 6) == 0 and globals()[f"p{(int(posicao) - 5)}"] != -1):
         sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao - 5) + '", "value": "' + str(globals()[f"p{(int(posicao) - 5)}"]) + '"}')
@@ -341,9 +337,9 @@ def valida_empurrao(posicao):
     # Movendo a peça diagonal inferior esquerda
     if ((int(posicao) + 5) > 36):
         pass
-    elif ((int(posicao) + 10) > 36 and globals()[f"p{(int(posicao) + 5)}"] != -1) or ((int(posicao+5) % 6) == 0 and globals()[f"p{(int(posicao) + 5)}"] != -1):
+    elif ((int(posicao) + 10) > 36 and globals()[f"p{(int(posicao) + 5)}"] != -1) or ((int(posicao+5) % 6) == 1 and globals()[f"p{(int(posicao) + 5)}"] != -1):
         sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao + 5) + '", "value": "' + str(globals()[f"p{(int(posicao) + 5)}"]) + '"}')
-    elif (int(posicao) + 5) < 36 and (int(posicao) + 10) < 36 and globals()[f"p{(int(posicao) + 5)}"] != -1 and globals()[f"p{(int(posicao) + 10)}"] == -1:
+    elif (int(posicao) + 5) <= 36 and (int(posicao) + 10) <= 36 and globals()[f"p{(int(posicao) + 5)}"] != -1 and globals()[f"p{(int(posicao) + 10)}"] == -1:
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao + 5) + '", "posicaofinal": "' + str(
             posicao + 10) + '", "value": "' + str(globals()[f"p{(int(posicao) + 5)}"]) + '"}')
 
@@ -352,10 +348,87 @@ def valida_empurrao(posicao):
         pass
     elif ((int(posicao) + 14) > 36 and globals()[f"p{(int(posicao) + 7)}"] != -1) or ((int(posicao+7) % 6) == 0 and globals()[f"p{(int(posicao) + 7)}"] != -1):
         sendMessage('{"event":"MOVEPECAPARAMAO", "posicaoinicial":"' + str(posicao + 7) + '", "value": "' + str(globals()[f"p{(int(posicao) + 7)}"]) + '"}')
-    elif (int(posicao) + 7) < 36 and (int(posicao) + 14) < 36 and globals()[f"p{(int(posicao) + 7)}"] != -1 and globals()[
+    elif (int(posicao) + 7) <= 36 and (int(posicao) + 14) <= 36 and globals()[f"p{(int(posicao) + 7)}"] != -1 and globals()[
         f"p{(int(posicao) + 14)}"] == -1:
         sendMessage('{"event":"MOVEPECA", "posicaoinicial":"' + str(posicao + 7) + '", "posicaofinal": "' + str(
             posicao + 14) + '", "value": "' + str(globals()[f"p{(int(posicao) + 7)}"]) + '"}')
+
+
+def valida_vencedor():
+    # Valida vencedor em linha
+    global vencedor1, vencedor2
+
+    if peca_disponivel == 0:
+        sendMessage('{"event":"VENCEDORPORPECA"}')
+    else:
+        i = 1
+        while i < 35:
+            #print("Comparando",str(i), str(i +1), str(i+2))
+            if((globals()[f"p{(int(i))}"] == globals()[f"p{(i+1)}"] == globals()[f"p{(i+2)}"]) and globals()[f"p{(i)}"] != -1):
+                i += 1
+                print("Vencedor em linha")
+                if(globals()[f"p{(int(i))}"] == numero_jogador):
+                    print("Vencedor1 ganhou")
+                    vencedor1 = globals()[f"p{(int(i))}"]
+                else:
+                    print("Vencedor2 ganhou")
+                    vencedor2 = globals()[f"p{(int(i))}"]
+
+            if((i % 6) == 4):
+                i = i + 3
+            else:
+                i += 1
+
+
+        # Valida vencedor em coluna
+        i = 1
+        while i < 25:
+            #print("Comparando",str(i), str(i +6), str(i+12))
+            if ((globals()[f"p{(int(i))}"] == globals()[f"p{(i + 6)}"] == globals()[f"p{(i + 12)}"]) and globals()[
+                f"p{(i)}"] != -1):
+                i += 1
+                if (globals()[f"p{(int(i))}"] == numero_jogador):
+                    vencedor1 = globals()[f"p{(int(i))}"]
+                else:
+                    vencedor2 = globals()[f"p{(int(i))}"]
+                print("Vencedor em coluna")
+            i += 1
+
+        # Valida vencedor em diagonal
+        i = 1
+        while i < 25:
+            #print("Comparando",str(i), str(i+7), str(i+14))
+            if ((globals()[f"p{(int(i))}"] == globals()[f"p{(i + 7)}"] == globals()[f"p{(i + 14)}"]) and globals()[
+                f"p{(i)}"] != -1):
+                i += 1
+                if (globals()[f"p{(int(i))}"] == numero_jogador):
+                    vencedor1 = globals()[f"p{(int(i))}"]
+                else:
+                    vencedor2 = globals()[f"p{(int(i))}"]
+                print("Vencedor em diagonal")
+            if ((i % 6) == 4):
+                i = i + 3
+            else:
+                i += 1
+
+        # Valida vencedor em diagonal inversa
+        i = 3
+        while i < 25:
+            #print("Comparando",str(i), str(i+5), str(i+10))
+            if ((globals()[f"p{(int(i))}"] == globals()[f"p{(i + 5)}"] == globals()[f"p{(i + 10)}"]) and globals()[
+                f"p{(i)}"] != -1):
+                i += 1
+                if (globals()[f"p{(int(i))}"] == numero_jogador):
+                    vencedor1 = globals()[f"p{(int(i))}"]
+                else:
+                    vencedor2 = globals()[f"p{(int(i))}"]
+                print("Vencedor em diagonal inversa")
+            if ((i % 6) == 0):
+                i = i + 3
+            else:
+                i += 1
+
+        sendMessage('{"event":"VENCEDOR", "vencedor1":"' + str(vencedor1) + '", "vencedor2": "' + str(vencedor2) + '"}')
 
 
 def receiveMessage():
@@ -368,32 +441,23 @@ def receiveMessage():
             for i in list(message):
                 entrada.append(i)
                 if(i == '}'):
-                    #print(message)
                     jsonData = json.loads(str("".join(entrada)))
-                    print("ReceiveMessageClient")
                     print(jsonData)
                     if jsonData['event'] == 'getUser':
                         client.send(username.encode(DEFAULT_ENCODING))
                         usernames.append(username)
                         numero_jogador = jsonData['index']
-                        #print("Novo numero do jogador")
-                        #print(numero_jogador)
 
                     elif jsonData['event'] == 'CHAT':
                         text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
 
-                    elif jsonData['event'] == 'JOGADA1':
+                    elif jsonData['event'] == 'JOGADA':
                         posicao = jsonData['posicao']
                         ultima_jogada = jsonData['index']
                         globals()[f"b{posicao}"]['bg'] = cors[jsonData['index']]
                         globals()[f"b{posicao}"]['fg'] = cors[jsonData['index']]
                         globals()[f"p{posicao}"] = jsonData['index']
-
                         label_peca['text'] = "Peças disponíveis: " + str(peca_disponivel)
-
-                    elif jsonData['event'] == 'JOGADA2':
-                        print("JOGADA2")
-                        #text_area_chat.insert(tk.INSERT, jsonData['name'] + ':' + jsonData['message'] + '\n')
 
                     elif jsonData['event'] == 'MOVEPECA':
                         posicaoinicial = int(jsonData['posicaoinicial'])
@@ -418,9 +482,39 @@ def receiveMessage():
 
                         label_peca['text'] = "Peças disponíveis: " + str(peca_disponivel)
 
+                    elif jsonData['event'] == 'VALIDAVENCEDOR':
+                        valida_vencedor()
+
+                    elif jsonData['event'] == 'VENCEDORPORPECA':
+                        if(int(jsonData['index']) == int(numero_jogador)):
+                            print("Você ganhou")
+                        else:
+                            print("Você perdeu")
+
+                    elif jsonData['event'] == 'VENCEDOR':
+                        print("Numero Jogador ",str(numero_jogador))
+                        if int(jsonData['vencedor1']) != -1 and int(jsonData['vencedor2']) != -1:
+                            print("Os dois jogadores ganharam na mesma jogada, é necessário validar quem jogou")
+                            if int(numero_jogador) == int(ultima_jogada):
+                                print("Você ganhou")
+                            else:
+                                print("Voce perdeu")
+                        elif int(jsonData['vencedor1']) != -1 or int(jsonData['vencedor2']) != -1:
+                            print("----------------------------------------------")
+                            print(int(jsonData['vencedor1']))
+                            print(int(jsonData['vencedor2']))
+                            print(numero_jogador)
+                            if int(jsonData['vencedor1']) == numero_jogador or int(
+                                    jsonData['vencedor2']) == numero_jogador:
+                                print("Entrou na bagaça")
+                            print("----------------------------------------------")
+                            if int(jsonData['vencedor1']) == int(numero_jogador) or int(jsonData['vencedor2']) == int(numero_jogador):
+                                print("Voce ganhou")
+                            else:
+                                print("Voce perdeu")
 
                     else:
-                        print("Else")
+                        print("Foi enviado um objeto desconhecido e nao mapeado")
 
                     entrada = []
         except:
@@ -430,8 +524,6 @@ def receiveMessage():
 
 def sendMessage(message = ''):
     client.send(message.encode(DEFAULT_ENCODING))
-
-
 
 # JANELAS
 def janela_aviso():
@@ -445,12 +537,6 @@ def janela_aviso():
 
 def action_nao(Toplevel):
     Toplevel.destroy()
-
-
-
-
-
-
 
 
 if __name__ == "__main__":

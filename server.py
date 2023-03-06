@@ -15,7 +15,6 @@ import os
 
 # kill -9 $(lsof -t -i:210)
 
-print("Vai rodar de novo")
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((HOST,PORT))
 server.listen()

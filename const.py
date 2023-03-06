@@ -8,6 +8,9 @@ cors = ["#1E90FF","#D2691E"]
 DEFAULT_ENCODING = "utf-8"
 #DEFAULT_ENCODING = "ascii"
 
+vencedor1 = -1
+vencedor2 = -1
+
 #Variaveis do jogo
 peca_disponivel = 8
 ultima_jogada = -1
