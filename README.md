@@ -16,11 +16,17 @@ mesmo “empurra” outras peças que estão nas casas ao redor, inclusive as do
 jogador. Não se pode empurrar duas ou mais peças alinhadas. Ao empurrar uma peça e essa
 sair do tabuleiro, a mesma retorna ao jogador.
 
-# Funcionalidades Básicas
+## Funcionalidades Básicas
 - Controle de turno, com definição de quem inicia a partida
 - Movimentação de peças do tabuleiro
 - Desistência
 - Chat para comunicação durante toda a partida
+
+## Dados Técnicos
+- Inicialização do Servidor: O servidor cria um socket e o associa a um endereço IP e uma porta específicos.
+- Conexão de Clientes: Cada cliente cria seu próprio socket e se conectar ao endereço IP e à porta onde o servidor está escutando.
+- Comunicação: O servidor recebe os comandos dos jogadores, atualiza o estado do jogo, e envia de volta as informações necessárias para ambos os clientes (por exemplo, o estado atualizado do tabuleiro).
+- Threads: São criadas duas threads separadas, uma para receber mensagens e outra para enviar mensagens. Essas threads permitem que o cliente mantenha a comunicação contínua com o servidor sem que uma tarefa bloqueie a outra. Se tudo estivesse rodando na mesma thread, o cliente teria que esperar para enviar uma mensagem até que a operação de recebimento fosse concluída, ou vice-versa, o que poderia causar atrasos e tornar a aplicação menos responsiva.
 
 # Como Iniciar
 ### 1. Clone o repositório do projeto:
@@ -37,11 +43,6 @@ cd gekitai
 ```
 sudo ./start.sh
 ```
-
-## Referências
-https://tesera.ru/images/items/1665162/Gekitai_Rules.pdf
-https://www.youtube.com/watch?v=tNV7umy6JyE
-
 
 ## Prints do Jogo 
 #### Tela inicial do jogo 
@@ -61,3 +62,6 @@ Demonstração do que foi desenvolvido, ao lado esquerdo é possível ver o chat
 #### Terminal linux após ser executado os 2 clientes e o servidor.
 ![image](https://github.com/user-attachments/assets/cd39f589-e085-42bb-a7c4-e598f29975a2)
 
+### Referências
+https://tesera.ru/images/items/1665162/Gekitai_Rules.pdf
+https://www.youtube.com/watch?v=tNV7umy6JyE
